@@ -103,7 +103,7 @@ async fn connection_handler(
 					Ok(mut message) => {
 						message.channel = Some(Channel::Shell);
 						out_pipe_w
-							.write_all(serde_json::to_string(&message)?.as_bytes())
+							.write_all((serde_json::to_string(&message)? + "\n").as_bytes())
 							.await?;
 					},
 					Err(e) => {
@@ -116,7 +116,7 @@ async fn connection_handler(
 					Ok(mut message) => {
 						message.channel = Some(Channel::IOPub);
 						out_pipe_w
-							.write_all(serde_json::to_string(&message)?.as_bytes())
+							.write_all((serde_json::to_string(&message)? + "\n").as_bytes())
 							.await?;
 					},
 					Err(e) => {
@@ -129,7 +129,7 @@ async fn connection_handler(
 					Ok(mut message) => {
 						message.channel = Some(Channel::Stdin);
 						out_pipe_w
-							.write_all(serde_json::to_string(&message)?.as_bytes())
+							.write_all((serde_json::to_string(&message)? + "\n").as_bytes())
 							.await?;
 					},
 					Err(e) => {
@@ -142,7 +142,7 @@ async fn connection_handler(
 					Ok(mut message) => {
 						message.channel = Some(Channel::Control);
 						out_pipe_w
-							.write_all(serde_json::to_string(&message)?.as_bytes())
+							.write_all((serde_json::to_string(&message)? + "\n").as_bytes())
 							.await?;
 					},
 					Err(e) => {

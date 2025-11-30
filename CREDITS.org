@@ -1,0 +1,5 @@
+* Thanks to the following projects:
+*** [[https://github.com/saghen/blink.cmp][=blink.cmp=]]
+	Showing how to load a rust module into neovim lua.
+*** [[https://github.com/benlubas/neorg-query][=neorg-query=]]
+	Showing how to hook up tokio to mlua modules.

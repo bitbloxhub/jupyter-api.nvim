@@ -209,7 +209,6 @@ async fn connect(lua: Lua, params: Value) -> Result<Connection> {
 	return match res.expect("Tokio JoinError") {
 		Ok(conn) => Ok(conn),
 		Err(err) => {
-			println!("AAAAAAAA");
 			return Err(mlua::Error::RuntimeError(err.to_string()));
 		}
 	};

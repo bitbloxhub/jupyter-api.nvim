@@ -11,7 +11,7 @@ M.connect = function(connection_info, callback)
 		assert(read_pipe ~= nil)
 		read_pipe:open(conn.read_pipe_fd)
 		read_pipe:read_start(function(err, data)
-			assert(read_callback, "Was sent a message with no read callback!\nThe message: " + data)
+			assert(read_callback, "Was sent a message with no read callback!\nThe message: " .. data)
 			if data then
 				data = vim.json.decode(data)
 			end
@@ -23,7 +23,7 @@ M.connect = function(connection_info, callback)
 		callback(conn, function(new_read_callback)
 			read_callback = new_read_callback
 		end, function(message)
-			write_pipe:write(vim.json.encode(message))
+			write_pipe:write(vim.json.encode(message) .. "\n")
 		end)
 	end)
 end

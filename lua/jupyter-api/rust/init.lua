@@ -55,7 +55,7 @@ M.jupyter_channel = {
 ---From https://docs.rs/runtimelib/0.30.0/runtimelib/connection/struct.JupyterMessage.html
 ---@class JupyterMessage
 ---@field header JupyterHeader
----@field parent_header JupyterHeader | nil
+---@field parent_header JupyterHeader | vim.NIL
 ---@field metadata any
 ---@field content JupyterMessageContent
 ---@field channel JupyterChannel

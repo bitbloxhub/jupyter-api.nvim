@@ -337,7 +337,8 @@ dependencies = [
 [[package]]
 name = "jupyter-protocol"
 version = "0.10.0"
-source = "git+https://github.com/bitbloxhub/runtimed?branch=fix-json-deserialize#cf20916715dba068b525ea92a00af1b9b0132f62"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d9c047f6b5e551563af2ddb13dafed833f0ec5a5b0f9621d5ad740a9ff1e1095"
 dependencies = [
  "async-trait",
  "bytes",
@@ -640,7 +641,8 @@ dependencies = [
 [[package]]
 name = "runtimelib"
 version = "0.30.0"
-source = "git+https://github.com/bitbloxhub/runtimed?branch=fix-json-deserialize#cf20916715dba068b525ea92a00af1b9b0132f62"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "481b48894073a0096f28cbe9860af01fc1b861e55b3bc96afafc645ee3de62dc"
 dependencies = [
  "base64",
  "bytes",

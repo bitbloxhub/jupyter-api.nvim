@@ -1,11 +1,14 @@
-use std::os::fd::{AsRawFd, RawFd};
+use std::{
+	collections::HashMap,
+	os::fd::{AsRawFd, RawFd},
+};
 
 use mlua::{FromLua, Lua, LuaSerdeExt, Result, Table, UserData, Value};
 use once_cell::sync::Lazy;
 use runtimelib::{
 	Channel, ClientControlConnection, ClientHeartbeatConnection, ClientIoPubConnection,
-	ClientShellConnection, ClientStdinConnection, ConnectionInfo, JupyterMessage,
-	create_client_control_connection, create_client_heartbeat_connection,
+	ClientShellConnection, ClientStdinConnection, ConnectionInfo, ExecuteRequest, JupyterMessage,
+	JupyterMessageContent, create_client_control_connection, create_client_heartbeat_connection,
 	create_client_iopub_connection, create_client_shell_connection, create_client_stdin_connection,
 };
 use thiserror::Error;
@@ -33,6 +36,10 @@ pub enum JupyterApiError {
 	RuntimelibError(#[from] runtimelib::RuntimeError),
 	#[error("IO error, {0}")]
 	IOError(#[from] std::io::Error),
+	#[error(
+		"Error receiving message: No content! (although this should already be caught by now!)"
+	)]
+	ReceiveNoContentError,
 	#[error("Error sending message: no channel!")]
 	SendNoChannelError,
 	#[error("Error sending message: cannot send to sub channel!")]
@@ -81,7 +88,11 @@ async fn connection_handler(
 		let mut pipe_line = String::new();
 		select! {
 			_pipe_msg = in_pipe_r.read_line(&mut pipe_line) => {
-				let message = serde_json::from_str::<JupyterMessage>(&pipe_line)?;
+				println!("{}", pipe_line);
+				let mut message = serde_json::from_str::<JupyterMessage>(&pipe_line)?;
+				let message_hashmap: HashMap<&str, serde_json::Value> = serde_json::from_str(&pipe_line)?;
+				let message_content_value = message_hashmap.get("content").ok_or(JupyterApiError::ReceiveNoContentError)?;
+				message.content = JupyterMessageContent::from_type_and_content(&message.header.msg_type, message_content_value.clone())?;
 				match message.channel {
 					Some(ref channel) => {
 						match channel {

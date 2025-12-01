@@ -43,4 +43,10 @@ M.debug_notify = function()
 	end)
 end
 
+M.debug_list_kernels = function()
+	jupyter_api.list_kernels(function(kernels)
+		print(vim.json.encode(kernels))
+	end)
+end
+
 return M

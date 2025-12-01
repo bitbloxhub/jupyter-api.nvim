@@ -83,6 +83,25 @@ M.jupyter_channel = {
 ---@type fun(connection_info: JupyterConnectionInfo, callback: fun(conn: JupyterConnection))
 M.connect = wrap(jupyter_api_nvim.connect)
 
+---From https://docs.rs/jupyter-protocol/0.10.0/jupyter_protocol/struct.JupyterKernelspec.html
+---@class JupyterKernelspec
+---@field argv string[]
+---@field display_name string
+---@field language string
+---@field metadata table<string, any> | nil
+---@field interrupt_mode string | nil
+---@field env table<string, string> | nil
+
+---From https://docs.rs/runtimelib/0.30.0/runtimelib/kernelspec/struct.KernelspecDir.html
+---@class JupyterKernelspecDir
+---@field kernel_name string
+---@field path string
+---@field kernelspec JupyterKernelspec
+
+---List the jupyter kernels
+---@type fun(callback: fun(kernels: JupyterKernelspecDir[]))
+M.list_kernels = wrap(jupyter_api_nvim.list_kernels)
+
 M.connect_example_params = {
 	ip = "127.0.0.1",
 	transport = "tcp",

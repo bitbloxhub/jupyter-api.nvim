@@ -7,9 +7,10 @@ use mlua::{FromLua, Lua, LuaSerdeExt, Result, Table, UserData, Value};
 use once_cell::sync::Lazy;
 use runtimelib::{
 	Channel, ClientControlConnection, ClientHeartbeatConnection, ClientIoPubConnection,
-	ClientShellConnection, ClientStdinConnection, ConnectionInfo, ExecuteRequest, JupyterMessage,
+	ClientShellConnection, ClientStdinConnection, ConnectionInfo, JupyterMessage,
 	JupyterMessageContent, create_client_control_connection, create_client_heartbeat_connection,
 	create_client_iopub_connection, create_client_shell_connection, create_client_stdin_connection,
+	list_kernelspecs,
 };
 use thiserror::Error;
 use tokio::{
@@ -225,10 +226,23 @@ async fn connect(lua: Lua, params: Value) -> Result<Connection> {
 	};
 }
 
+async fn list_kernels(lua: Lua, _: Value) -> Result<Value> {
+	let handle = TOKIO.handle();
+	let res = handle
+		.spawn(async move {
+			return list_kernelspecs().await;
+		})
+		.await;
+
+	#[allow(clippy::expect_used)]
+	return Ok(lua.to_value(&res.expect("Tokio JoinError"))?);
+}
+
 #[mlua::lua_module]
 fn jupyter_api_nvim(lua: &Lua) -> Result<Table> {
 	let exports = lua.create_table()?;
 	exports.set("connect", lua.create_async_function(connect)?)?;
+	exports.set("list_kernels", lua.create_async_function(list_kernels)?)?;
 
 	exports.set(
 		"PENDING",

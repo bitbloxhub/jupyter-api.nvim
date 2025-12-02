@@ -231,11 +231,7 @@ async fn connect(lua: Lua, params: Value) -> Result<Connection> {
 
 async fn list_kernels(lua: Lua, _: Value) -> Result<Value> {
 	let handle = TOKIO.handle();
-	let res = handle
-		.spawn(async move {
-			list_kernelspecs().await
-		})
-		.await;
+	let res = handle.spawn(async move { list_kernelspecs().await }).await;
 
 	#[allow(clippy::expect_used)]
 	return lua.to_value(&res.expect("Tokio JoinError"));

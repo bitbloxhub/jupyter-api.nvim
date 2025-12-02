@@ -29,7 +29,7 @@ M.connect = function(connection_info, callback)
 end
 
 ---List the jupyter kernels
----@type fun(callback: fun(kernels: JupyterKernel[]))
+---@type fun(callback: fun(kernels: JupyterKernelspecDir[]))
 M.list_kernels = jupyter_api_nvim.list_kernels
 
 return M

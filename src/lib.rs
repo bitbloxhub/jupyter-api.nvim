@@ -75,6 +75,8 @@ impl UserData for Connection {
 	}
 }
 
+// 7 is the max, we have 9 but dont use 3 of them
+#[allow(clippy::too_many_arguments)]
 async fn connection_handler(
 	_out_pipe_r: Receiver,
 	mut out_pipe_w: Sender,
@@ -231,12 +233,12 @@ async fn list_kernels(lua: Lua, _: Value) -> Result<Value> {
 	let handle = TOKIO.handle();
 	let res = handle
 		.spawn(async move {
-			return list_kernelspecs().await;
+			list_kernelspecs().await;
 		})
 		.await;
 
 	#[allow(clippy::expect_used)]
-	return Ok(lua.to_value(&res.expect("Tokio JoinError"))?);
+	return lua.to_value(&res.expect("Tokio JoinError"));
 }
 
 #[mlua::lua_module]

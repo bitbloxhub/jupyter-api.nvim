@@ -233,7 +233,7 @@ async fn list_kernels(lua: Lua, _: Value) -> Result<Value> {
 	let handle = TOKIO.handle();
 	let res = handle
 		.spawn(async move {
-			list_kernelspecs().await;
+			list_kernelspecs().await
 		})
 		.await;
 

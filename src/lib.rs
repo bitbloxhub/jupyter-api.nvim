@@ -1,6 +1,7 @@
 use std::{
 	collections::HashMap,
 	os::fd::{AsRawFd, RawFd},
+	sync::Arc,
 };
 
 use mlua::{FromLua, Lua, LuaSerdeExt, Result, Table, UserData, Value};
@@ -221,7 +222,7 @@ async fn connect(lua: Lua, params: Value) -> Result<Connection> {
 	return match res.expect("Tokio JoinError") {
 		Ok(conn) => Ok(conn),
 		Err(err) => {
-			return Err(mlua::Error::RuntimeError(err.to_string()));
+			return Err(mlua::Error::ExternalError(Arc::from(err)));
 		}
 	};
 }

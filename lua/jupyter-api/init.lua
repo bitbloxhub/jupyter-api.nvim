@@ -13,9 +13,12 @@ M.connect = function(connection_info, callback)
 		read_pipe:read_start(function(err, data)
 			assert(read_callback, "Was sent a message with no read callback!\nThe message: " .. data)
 			if data then
-				data = vim.json.decode(data)
+				for split_data in data:gmatch("[^\r\n]+") do
+					read_callback(err, vim.json.decode(split_data))
+				end
+			else
+				read_callback(err, data)
 			end
-			read_callback(err, data)
 		end)
 		local write_pipe = vim.uv.new_pipe()
 		assert(write_pipe ~= nil)

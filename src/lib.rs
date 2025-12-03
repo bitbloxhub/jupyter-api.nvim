@@ -92,7 +92,6 @@ async fn connection_handler(
 		let mut pipe_line = String::new();
 		select! {
 			_pipe_msg = in_pipe_r.read_line(&mut pipe_line) => {
-				println!("{}", pipe_line);
 				let mut message = serde_json::from_str::<JupyterMessage>(&pipe_line)?;
 				let message_hashmap: HashMap<&str, serde_json::Value> = serde_json::from_str(&pipe_line)?;
 				let message_content_value = message_hashmap.get("content").ok_or(JupyterApiError::ReceiveNoContentError)?;

@@ -10,11 +10,20 @@ M.connect = function(connection_info, callback)
 		local read_pipe = vim.uv.new_pipe()
 		assert(read_pipe ~= nil)
 		read_pipe:open(conn.read_pipe_fd)
+		local read_pipe_buffer = ""
 		read_pipe:read_start(function(err, data)
 			assert(read_callback, "Was sent a message with no read callback!\nThe message: " .. data)
 			if data then
-				for split_data in data:gmatch("[^\r\n]+") do
-					read_callback(err, vim.json.decode(split_data))
+				if string.sub(data, -2) == "}\n" then
+					read_pipe_buffer = read_pipe_buffer .. data
+				else
+					read_pipe_buffer = read_pipe_buffer .. string.sub(data, 1, -2)
+				end
+				if string.sub(read_pipe_buffer, -1) == "\n" then
+					for split_data in read_pipe_buffer:gmatch("[^\r\n]+") do
+						read_callback(err, vim.json.decode(split_data))
+					end
+					read_pipe_buffer = ""
 				end
 			else
 				read_callback(err, data)

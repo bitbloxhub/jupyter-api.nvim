@@ -6,6 +6,25 @@ local M = {}
 
 local PENDING = (coroutine.wrap(jupyter_api_nvim.PENDING))()
 
+local denull
+denull = function (input)
+	if type(input) == "table" then
+		local denulled = {}
+		for key, value in pairs(input) do
+			denulled[key] = denull(value)
+		end
+		return denulled
+	elseif type(input) == "userdata" then
+		if tostring(input) == "userdata: NULL" then
+			return nil
+		else
+			return input
+		end
+	else
+		return input
+	end
+end
+
 ---Wrap an async rust function in a coroutine that neovim will poll. Return a function that takes
 ---function args and a callback function
 ---@param async_fn any
@@ -23,7 +42,7 @@ local wrap = function(async_fn)
 			if res == PENDING then
 				vim.defer_fn(exec, 10)
 			else
-				cb(res)
+				cb(denull(res))
 			end
 		end
 		vim.schedule(exec)

@@ -7,7 +7,7 @@ local M = {}
 local PENDING = (coroutine.wrap(jupyter_api_nvim.PENDING))()
 
 local denull
-denull = function (input)
+denull = function(input)
 	if type(input) == "table" then
 		local denulled = {}
 		for key, value in pairs(input) do

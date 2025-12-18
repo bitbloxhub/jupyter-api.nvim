@@ -14,7 +14,7 @@ M.connect_params = {
 }
 
 M.debug_notify = function()
-	jupyter_api.connect(M.connect_params, function(conn, set_read_callback, send)
+	jupyter_api.connect(M.connect_params, function(_, set_read_callback, send)
 		set_read_callback(function(err, data)
 			print(err)
 			print(vim.json.encode(data))

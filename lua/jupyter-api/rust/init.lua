@@ -121,17 +121,4 @@ M.connect = wrap(jupyter_api_nvim.connect)
 ---@type fun(callback: fun(kernels: JupyterKernelspecDir[]))
 M.list_kernels = wrap(jupyter_api_nvim.list_kernels)
 
-M.connect_example_params = {
-	ip = "127.0.0.1",
-	transport = "tcp",
-	shell_port = 6767,
-	iopub_port = 6768,
-	stdin_port = 6790,
-	control_port = 6791,
-	hb_port = 6792,
-	key = "secret_key",
-	signature_scheme = "hmac-sha256",
-	kernel_name = "python3",
-}
-
 return M

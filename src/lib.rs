@@ -75,7 +75,8 @@ impl UserData for Connection {
 	}
 }
 
-// 7 is the max, we have 9 but dont use 3 of them
+// 7 is the max, We have 9 but dont use 3 of them, mostly so we can hold a reference to them so
+//   they do not drop.
 #[allow(clippy::too_many_arguments)]
 async fn connection_handler(
 	_out_pipe_r: Receiver,

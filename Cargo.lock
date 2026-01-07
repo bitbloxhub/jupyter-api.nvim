@@ -323,6 +323,7 @@ dependencies = [
 name = "jupyter-api-nvim"
 version = "0.1.0"
 dependencies = [
+ "jupyter-protocol 0.11.0",
  "mlua",
  "once_cell",
  "runtimelib",
@@ -336,9 +337,25 @@ dependencies = [
 
 [[package]]
 name = "jupyter-protocol"
-version = "0.10.0"
+version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d9c047f6b5e551563af2ddb13dafed833f0ec5a5b0f9621d5ad740a9ff1e1095"
+checksum = "6e3070ed16d5582cfee6b2b770e5fe115936ea63199ea36c6915e97c4f79c01f"
+dependencies = [
+ "async-trait",
+ "bytes",
+ "chrono",
+ "futures",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.17",
+ "uuid",
+]
+
+[[package]]
+name = "jupyter-protocol"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7d59805f0675efc81c70fe198b516c64062d52deb93a9f0562509670a99f011a"
 dependencies = [
  "async-trait",
  "bytes",
@@ -640,9 +657,9 @@ dependencies = [
 
 [[package]]
 name = "runtimelib"
-version = "0.30.0"
+version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "481b48894073a0096f28cbe9860af01fc1b861e55b3bc96afafc645ee3de62dc"
+checksum = "b1efd92c9e3baa3694328c33c6ff396f385df5247e71f090fe663c499620cf03"
 dependencies = [
  "base64",
  "bytes",
@@ -651,7 +668,7 @@ dependencies = [
  "dirs",
  "futures",
  "glob",
- "jupyter-protocol",
+ "jupyter-protocol 1.0.0",
  "ring",
  "serde",
  "serde_json",

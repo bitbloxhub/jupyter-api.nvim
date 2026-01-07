@@ -1,5 +1,4 @@
 use std::{
-	collections::HashMap,
 	os::fd::{AsRawFd, RawFd},
 	sync::Arc,
 };
@@ -9,7 +8,7 @@ use once_cell::sync::Lazy;
 use runtimelib::{
 	Channel, ClientControlConnection, ClientHeartbeatConnection, ClientIoPubConnection,
 	ClientShellConnection, ClientStdinConnection, ConnectionInfo, JupyterMessage,
-	JupyterMessageContent, create_client_control_connection, create_client_heartbeat_connection,
+	create_client_control_connection, create_client_heartbeat_connection,
 	create_client_iopub_connection, create_client_shell_connection, create_client_stdin_connection,
 	list_kernelspecs,
 };
@@ -93,10 +92,8 @@ async fn connection_handler(
 		let mut pipe_line = String::new();
 		select! {
 			_pipe_msg = in_pipe_r.read_line(&mut pipe_line) => {
-				let mut message = serde_json::from_str::<JupyterMessage>(&pipe_line)?;
-				let message_hashmap: HashMap<&str, serde_json::Value> = serde_json::from_str(&pipe_line)?;
-				let message_content_value = message_hashmap.get("content").ok_or(JupyterApiError::ReceiveNoContentError)?;
-				message.content = JupyterMessageContent::from_type_and_content(&message.header.msg_type, message_content_value.clone())?;
+				let message: JupyterMessage = serde_json::from_str(&pipe_line)?;
+
 				match message.channel {
 					Some(ref channel) => {
 						match channel {
